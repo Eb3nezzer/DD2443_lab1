@@ -1,0 +1,10 @@
+# Average execution times of incrementers with N threads
+# Note: This is placeholder data
+# N	local ns	pdc ns
+1	180		100
+2	264		195
+4	443		405
+8	1617		804
+16	4837		1580
+32	9011		3200
+64	12055		6400

@@ -17,6 +17,10 @@ javac MainA.java
 java MainA
 ```
 
+Q: Run the program locally with 4 threads. What results do you expect?
+
+As there are no synchronisation mechanisms and the integer is shared, the final result will essentially by random dependent on the execution trace.
+
 ### Task 1b: Synchronized keyword
 Source files:
 
@@ -27,6 +31,10 @@ To compile and execute:
 javac MainB.java
 java MainB
 ```
+
+Q: Run the program locally with 4 threads. What results do you expect?
+
+The synchronised keyword results in atomic read and writes, and thus the final result will be the result of 4 times 1,000,000 increments, so 4,000,000.
 
 ### Task 1c: Synchronization performance
 

@@ -18,7 +18,7 @@ public class MainA {
 		public void run() {
 			while (true) {
 				// Think for a bit
-				System.out.println("Philosopher " + seat + " is thinking");
+				System.out.println("Philosopher " + seat + " is thinking " +" at time " + System.nanoTime());
 				try {
                     Thread.sleep((long) (Math.random() * 1000));
                 } catch (InterruptedException e) {
@@ -28,12 +28,12 @@ public class MainA {
 
 				// Attempt to pick up both chopsticks
 				leftChopstick.lock();
-				System.out.println("Philosopher " + seat + " has chopstick " + seat);
+				System.out.println("Philosopher " + seat + " has chopstick " + seat + " at time " + System.nanoTime());
 				rightChopstick.lock();
-				System.out.println("Philosopher " + seat + " has chopstick " + (seat+1));
+				System.out.println("Philosopher " + seat + " has chopstick " + (seat+1) +" at time " + System.nanoTime());
 
 				// Once have gotten both, start eating
-				System.out.println("Philosopher " + seat + " is eating");
+				System.out.println("Philosopher " + seat + " is eating" +" at time " + System.nanoTime());
 				try {
                     Thread.sleep((long) (Math.random() * 1000));
                 } catch (InterruptedException e) {
@@ -44,7 +44,7 @@ public class MainA {
 				// Once finished eating, place both chopsticks down
 				leftChopstick.unlock();
 				rightChopstick.unlock();
-				System.out.println("Philosopher " + seat + " has released their chopsticks");
+				System.out.println("Philosopher " + seat + " has released their chopsticks" +" at time " + System.nanoTime());
 			}
 		}
 	}

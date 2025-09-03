@@ -1,17 +1,24 @@
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class MainA {
+public class MainC {
 
     public static class Philosopher implements Runnable {
         private final int id;
         private final Lock firstChopstick;
         private final Lock secondChopstick;
 
-        public Philosopher(int id, Lock leftChopstick, Lock rightChopstick) {
+        public Philosopher(int id, Lock leftChopstick, Lock rightChopstick, int totalPhilosophers) {
             this.id = id;
-			this.firstChopstick = leftChopstick;
-			this.secondChopstick = rightChopstick;
+            
+            // Break circular wait: last philosopher picks up right first
+            if (id == totalPhilosophers - 1) {
+                this.firstChopstick = rightChopstick;
+                this.secondChopstick = leftChopstick;
+            } else {
+                this.firstChopstick = leftChopstick;
+                this.secondChopstick = rightChopstick;
+            }
         }
 
         public void run() {
@@ -72,7 +79,7 @@ public class MainA {
 		for (int i = 0; i < num_philsophers; i++) {
 			Lock leftChopstick = chopsticks[i];
 			Lock rightChopstick = chopsticks[(i+1) % num_philsophers];
-			philosophers[i] = new Thread(new Philosopher(i, leftChopstick, rightChopstick));
+			philosophers[i] = new Thread(new Philosopher(i, leftChopstick, rightChopstick, num_philsophers));
 		}
 
 		// Start philosophers

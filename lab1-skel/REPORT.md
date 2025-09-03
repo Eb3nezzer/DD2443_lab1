@@ -101,6 +101,17 @@ where 'N' is the number of rounds to perform measurement for. This defaults to 1
 
 ## Task 3: Producer-Consumer Buffer using Condition Variables
 
+Source files:
+
+- `task3/Main.java` (main file)
+- `task3/Buffer.java`
+
+To compile and execute:
+```
+javac Buffer.java Main.java
+java Main
+```
+
 ## Task 4: Counting Semaphore
 
 ## Task 5: Dining Philosophers

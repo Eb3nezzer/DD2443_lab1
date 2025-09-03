@@ -1,12 +1,13 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 public class MainC {
 	private static volatile int sum = 0;
 	public static class Incrementer implements Runnable {
 		public void run() {
-			for (int j = 0; j < 10; j++) {
+			for (int j = 0; j < 1000000; j++) {
                 synchronized(MainC.class){
             	    sum++;
                 }
@@ -37,13 +38,14 @@ public class MainC {
         long endTime = System.nanoTime();
 
         // Print result
-        System.out.println(sum);
+        // System.out.println(sum);
         sum = 0;
 
 		return endTime - startTime;
 	}
 
 	public static void main(String [] args) {
+        long[] intervals = new long[7];
         String fileName = "task1c_test.dat";
         int X = 2;
         int Y = 1;
@@ -63,12 +65,13 @@ public class MainC {
                 for (int i = 0; i < Y; i++){
                     try {
                         long timeTaken = program.run_experiments(n);
-                        out.printf("%d\t%d%n", n, timeTaken);
-                        // System.out.println("Time taken (ns): " + timeTaken);
+                        intervals[i] = timeTaken;
+                        // out.printf("%d\t%d%n", n, timeTaken);
                     }catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
+                out.printf("%d\t%d%n",n , Arrays.stream(intervals).sum()/7);
             }
         }catch (IOException e) {
             e.printStackTrace();

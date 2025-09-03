@@ -1,6 +1,6 @@
 public class Main {
-	private static int buffer_size = 1_000_000;
-	private static volatile Buffer buffer = new Buffer(buffer_size);
+	private static int buffer_size = 1_000;
+	private static Buffer buffer = new Buffer(buffer_size);
 
 	public static class Producer implements Runnable {
 		public void run() {
@@ -8,7 +8,8 @@ public class Main {
 				try {
 					buffer.add(i);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					Thread.currentThread().interrupt();
+					break;
 				}
 			}
 			buffer.close();
@@ -28,7 +29,7 @@ public class Main {
 					}
 				}
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Thread.currentThread().interrupt();
 			}
 			System.out.println("Buffer is now closed, exiting");
 		}

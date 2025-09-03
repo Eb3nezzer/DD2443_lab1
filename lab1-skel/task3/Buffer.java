@@ -4,7 +4,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Buffer {
 	final Lock lock = new ReentrantLock();
-	final java.util.concurrent.locks.Condition notFull = lock.newCondition();
+	final Condition notFull = lock.newCondition();
 	final Condition notEmpty = lock.newCondition();
 
 	final int[] ints;
@@ -19,7 +19,7 @@ public class Buffer {
 		capacity = size;
 	}
 
-	void add(int i) throws InterruptedException {
+	public void add(int i) throws InterruptedException {
 		// claim the lock
 		lock.lock();
 		try {
@@ -35,7 +35,7 @@ public class Buffer {
 
 			// add item to buffer
 			ints[add_index] = i;
-			add_index = (add_index + 1) & capacity;
+			add_index = (add_index + 1) % capacity;
 			count++;
 
 			// signal that buffer is not empty

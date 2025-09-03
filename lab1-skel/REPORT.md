@@ -19,7 +19,7 @@ java MainA
 
 Q: Run the program locally with 4 threads. What results do you expect?
 
-As there are no synchronisation mechanisms and the integer is shared, the final result will essentially by random dependent on the execution trace.
+As there are no synchronisation mechanisms and the integer is shared, the final result will essentially be random, depending on the execution trace.
 
 ### Task 1b: Synchronized keyword
 Source files:
@@ -49,7 +49,7 @@ java MainC <N>
 ```
 Where `N` is number of threads to execute with.
 
-In figure 1, we see how the execution time scaled with the number of threads.
+In figure 1, we see how the execution time scaled with the number of threads. It seems to be rather linear. We did unfortunately not manage to get the dardel execution to work. The time it takes for even one thread to finish is a lot longer than the dummy data but 
 ...
 
 ![My plot for task 1c](data/task1c.png)
@@ -121,5 +121,6 @@ java Main
 ```
 
 ## Task 4: Counting Semaphore
+We didn't encounter any specific mistakes. The semaphore does not exceed the initial counter value. The semaphore only deadlocks when there are 0 resources.
 
 ## Task 5: Dining Philosophers

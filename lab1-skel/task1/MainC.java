@@ -37,18 +37,16 @@ public class MainC {
         
         long endTime = System.nanoTime();
 
-        // Print result
-        // System.out.println(sum);
         sum = 0;
 
 		return endTime - startTime;
 	}
 
 	public static void main(String [] args) {
-        long[] intervals = new long[7];
         String fileName = "task1c_test.dat";
-        int X = 2;
-        int Y = 1;
+        int X = 3;
+        int Y = 3;
+        double[] intervals = new double[Y];
 
         MainC program = new MainC(); // create an instance
         try (PrintWriter out = new PrintWriter(new FileWriter(fileName))) {
@@ -64,14 +62,29 @@ public class MainC {
                 // measurement phase
                 for (int i = 0; i < Y; i++){
                     try {
-                        long timeTaken = program.run_experiments(n);
+                        double timeTaken = program.run_experiments(n);
                         intervals[i] = timeTaken;
                         // out.printf("%d\t%d%n", n, timeTaken);
                     }catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-                out.printf("%d\t%d%n",n , Arrays.stream(intervals).sum()/7);
+
+                double stdDev = 0;
+                double mean = Arrays.stream(intervals).average().orElse(0.0);
+                double variance = 0.0;
+                for (double t : intervals) {
+                    variance += Math.pow(t - mean, 2);
+                }
+                variance /= (Y - 1); // sample std deviation
+                stdDev = Math.sqrt(variance);
+                System.out.println(mean);
+                System.out.println(stdDev);
+                
+                // System.out.println(Arrays.stream(intervals).sum()/Y);
+
+                // out.printf("%d\t%d%n",n , mean);
+                out.printf("%d\t%.2f\t%.2f%n", n, mean, stdDev);
             }
         }catch (IOException e) {
             e.printStackTrace();

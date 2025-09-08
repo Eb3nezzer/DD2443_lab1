@@ -1,0 +1,28 @@
+-------------
+Before dardel
+-------------
+
+To log into dardel:
+	ssh maxharr@dardel.kth.se
+
+To transfer files onto dardel:
+	scp MainC.java maxharr@dardel.pdc.kth.se:/cfs/klemming/scratch/m/maxharr 
+
+To transfer files from dardel:
+	scp maxharr@dardel.pdc.kth.se:/cfs/klemming/scratch/m/maxharr/task1c_test.dat . 
+
+-------------
+From dardel
+-------------
+
+To get project info:
+	projinfo
+
+To get a job allocation:
+	salloc --nodes=1 -t 2:00 -A edu25.dd2443 -p shared -n 64
+To run the java file `MainC.java` in the current directory:
+	srun -n 1 --cpus-per-task=64 java MainC.java
+
+Further information:
+https://support.pdc.kth.se/doc/run_jobs/run_interactively/
+https://support.pdc.kth.sdd

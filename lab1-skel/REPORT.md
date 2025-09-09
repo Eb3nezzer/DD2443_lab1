@@ -53,7 +53,7 @@ java MainC <N>
 ```
 Where `N` is number of threads to execute with.
 
-In figure 1, we see how the execution time scaled with the number of threads. It seems to be rather linear. We did unfortunately not manage to get the dardel execution to work. The time it takes for even one thread to finish is a lot longer than the dummy data but 
+In figure 1, we see how the execution time scaled with the number of threads. It seems to be rather linear. 
 ...
 
 ![My plot for task 1c](data/task1c.png)

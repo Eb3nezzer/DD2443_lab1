@@ -64,7 +64,6 @@ public class MainC {
                     try {
                         double timeTaken = program.run_experiments(n);
                         intervals[i] = timeTaken;
-                        // out.printf("%d\t%d%n", n, timeTaken);
                     }catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -78,12 +77,9 @@ public class MainC {
                 }
                 variance /= (Y - 1); // sample std deviation
                 stdDev = Math.sqrt(variance);
-                System.out.println(mean);
-                System.out.println(stdDev);
+                System.out.println("The mean for " + n + " threads is: " + mean);
+                System.out.println("The standard deviation for " + n + " threads is " + stdDev);
                 
-                // System.out.println(Arrays.stream(intervals).sum()/Y);
-
-                // out.printf("%d\t%d%n",n , mean);
                 out.printf("%d\t%.2f\t%.2f%n", n, mean, stdDev);
             }
         }catch (IOException e) {

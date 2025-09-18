@@ -33,7 +33,14 @@ Source files:
 
 - `ForkJoinPoolSort.java`
 
-We decided to ...
+Benefits of ForkJoinPool:
+
+1) Work Stealing: Idle threads can steal work from busy threads, leading to better load balancing.
+2) Natural Recursion: The recursive structure matches the divide-and-conquer nature of merge sort perfectly.
+3) Efficient Memory Usage: The alternating array technique minimizes memory allocation and copying.
+4) Automatic Parallelization: The framework automatically manages thread creation and task distribution.
+
+The class now follows the fork-join paradigm more naturally while maintaining the same sorting performance and parallelization benefits.
 
 ## Task 5: ParallelStreamSort
 

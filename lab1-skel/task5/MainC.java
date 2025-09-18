@@ -71,7 +71,7 @@ public class MainC {
         // We create as many chopsticks as there are philosophers
 		Lock[] chopsticks = new Lock[num_philsophers];
 		for (int i = 0; i < num_philsophers; i++) {
-			chopsticks[i] = new ReentrantLock();
+			chopsticks[i] = new ReentrantLock(true);
 		}
 
 		// Create philosophers

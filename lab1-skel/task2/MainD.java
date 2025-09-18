@@ -23,6 +23,7 @@ public class MainD {
 		public void run() {
 			while (!done) {}
 			pri_start = System.nanoTime();
+			System.out.println(sharedInt);
 		}
 	}
 
@@ -50,6 +51,7 @@ public class MainD {
 						e.printStackTrace();
 					}
 				}
+				System.out.println(sharedInt);
 			}
 			pri_start = System.nanoTime();
 		}

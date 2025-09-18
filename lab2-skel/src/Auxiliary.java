@@ -14,7 +14,7 @@ public class Auxiliary {
                 Random prng = new Random(seed);
                 int[] arr = new int[n];
                 for (int i = 0; i < n; ++i)
-                        arr[i] = prng.nextInt();
+                        arr[i] = prng.nextInt() % 100;
                 return arr;
         }
 

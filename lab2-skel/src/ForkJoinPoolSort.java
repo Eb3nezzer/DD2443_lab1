@@ -34,7 +34,6 @@ public class ForkJoinPoolSort implements Sorter {
                         pool.invoke(task);
                 } finally {
                         pool.shutdown();
-                        pool.close();
                 }
 
                 // We have sorted into work array, copy across

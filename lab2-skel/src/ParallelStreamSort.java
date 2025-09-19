@@ -38,7 +38,7 @@ public class ParallelStreamSort implements Sorter {
 
                 try {
                         // Find number of sequential base lists below threshold
-                        int num_sublists = Math.ceilDiv(arr.length, sequential_threshold);
+                        int num_sublists = (arr.length + sequential_threshold - 1) / sequential_threshold;
                         // Initially sequentially sort sublists of length sequential_threshold
                         pool.submit(() -> {
                                 IntStream.range(0, num_sublists+1)
@@ -58,7 +58,6 @@ public class ParallelStreamSort implements Sorter {
                         throw new RuntimeException("Sorting failed", e);
                 } finally {
                         pool.shutdown();
-                        pool.close();
                 }
         }
 

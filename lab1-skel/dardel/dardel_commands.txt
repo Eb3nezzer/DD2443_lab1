@@ -1,12 +1,18 @@
 -------------
 Before dardel
 -------------
+To generate a kereberos ticket:
+	heimdal-kinit -f -l 7d maxharr@NADA.KTH.SE
+
+To look at generated tickets:
+	heimdal-klist
 
 To log into dardel:
 	ssh maxharr@dardel.kth.se
 
 To transfer files onto dardel:
 	scp MainC.java maxharr@dardel.pdc.kth.se:/cfs/klemming/scratch/m/maxharr 
+add the [-r] option to transfer directories
 
 To transfer files from dardel:
 	scp maxharr@dardel.pdc.kth.se:/cfs/klemming/scratch/m/maxharr/task1c_test.dat . 

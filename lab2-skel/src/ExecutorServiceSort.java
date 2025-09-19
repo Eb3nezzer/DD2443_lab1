@@ -40,7 +40,7 @@ public class ExecutorServiceSort implements Sorter {
                 try {
                         // Initial round of sequential sorts into work[]
                         int sequential_len = sequential_threshold;
-                        int num_sublists = Math.ceilDiv(arr.length, sequential_len);
+                        int num_sublists = (arr.length + sequential_len - 1) / sequential_len;
                         
                         for (int i = 0; i < num_sublists; i++) {
                                 int start_ind = i * sequential_len;

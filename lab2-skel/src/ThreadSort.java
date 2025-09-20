@@ -2,12 +2,13 @@
  * Sort using Java's Thread, Runnable, start(), and join().
  * 
  * We use bottom-up merge sort. On input arr[] with n elements:
- * 1) A work array B[] is allocated. The arr[] list is split into chunks of 16 elements.
- * 2) Each thread sequentially sorts a 16-chunk list into B[]. All 16-chunks are sorted.
+ * 1) A work array is allocated. The arr[] list is split into chunks of 16 elements.
+ * 2) Each thread sequentially sorts a 16 element list into work[]. All 16-chunks are sorted.
  * 3) We then have n/16 sorted sublists. The first two sublists are merged, the second two are merged, and so on.
  * 4) We then have n/8 sorted sublists. The first two sublists are merged, the second two are merged, and so on.
  * 5) This continues at each level until only two sublists are remaining, which are finally merged.
  */
+
 public class ThreadSort implements Sorter {
     public final int threads;
     public final int sequential_threshold = 16;
@@ -43,7 +44,7 @@ public class ThreadSort implements Sorter {
                 // Manually allocate tasks to threads
                 avail_threads[t] = new Thread(() -> {
                     int start_chunk = index * chunks_per_thread;
-                    int end_chunk = Math.min(start_chunk + index, num_sublists);
+                    int end_chunk = Math.min(start_chunk + chunks_per_thread, num_sublists);
                     
                     // Loop through allocated sublists in chunk
                     for (int i = start_chunk; i < end_chunk; i++) {
@@ -65,6 +66,7 @@ public class ThreadSort implements Sorter {
                     return;
                 }
             }
+            
 
             // Now perform bottom-up merging
             int current_size = sequential_len;

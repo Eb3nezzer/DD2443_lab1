@@ -63,19 +63,19 @@ public class ParallelStreamSort implements Sorter {
 
         private void mergeSort(int[] arr, int[] work) {
                 // Start with chunks of sequential threshold, then double
-                for (int chunkSize = sequential_threshold; chunkSize < arr.length; chunkSize *= 2) {
-                        final int currentChunkSize = chunkSize;
-                        final int nextChunkSize = chunkSize * 2;
+                for (int chunk_size = sequential_threshold; chunk_size < arr.length; chunk_size *= 2) {
+                        final int current_size = chunk_size;
+                        final int next_size = chunk_size * 2;
                 
                         // Create a stream of merge operations
                         // Each operation merges two adjacent chunks of currentChunkSize
-                        IntStream.range(0, (arr.length + nextChunkSize - 1) / nextChunkSize)
+                        IntStream.range(0, (arr.length + next_size - 1) / next_size)
                                 .parallel() 
-                                .forEach(chunkIndex -> {
+                                .forEach(chunk_index -> {
                                         // Find indices for the chunks to be merged
-                                        int left = chunkIndex * nextChunkSize;
-                                        int mid = Math.min(left + currentChunkSize, arr.length);
-                                        int right = Math.min(left + nextChunkSize, arr.length);
+                                        int left = chunk_index * next_size;
+                                        int mid = Math.min(left + current_size, arr.length);
+                                        int right = Math.min(left + next_size, arr.length);
                                         
                                         // Only merge if there are two chunks to merge
                                         if (mid < right) {

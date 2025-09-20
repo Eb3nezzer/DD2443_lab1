@@ -2,8 +2,8 @@
  * Sort using Java's ExecutorService.
  * 
  * We use bottom-up merge sort. On input arr[] with n elements:
- * 1) A work array B[] is allocated. The arr[] list is split into chunks of 16 elements.
- * 2) Each thread sequentially sorts a 16-chunk list into B[]. All 16-chunks are sorted.
+ * 1) A work array is allocated. The arr[] list is split into chunks of 16 elements.
+ * 2) Each thread sequentially sorts a 16 element list into work[]. All 16-chunks are sorted.
  * 3) We then have n/16 sorted sublists. The first two sublists are merged, the second two are merged, and so on.
  * 4) We then have n/8 sorted sublists. The first two sublists are merged, the second two are merged, and so on.
  * 5) This continues at each level until only two sublists are remaining, which are finally merged.
@@ -46,11 +46,11 @@ public class ExecutorServiceSort implements Sorter {
                                 int start_ind = i * sequential_len;
                                 int end_ind = Math.min(start_ind + sequential_len, arr.length);
                                 
-                                Runnable runnableTask = () -> {
+                                Runnable runnable_task = () -> {
                                         // Sort sublists sequentially into arr
-                                        seq_split(arr, work, start_ind, end_ind);
+                                        sequential_sort(arr, start_ind, end_ind);
                                 };
-                                pool.execute(runnableTask);
+                                pool.execute(runnable_task);
                         }
 
                         // Wait for all initial sequential sorts to complete
@@ -83,10 +83,10 @@ public class ExecutorServiceSort implements Sorter {
                                                 pool.execute(worker);
                                         } else {
                                                 // Copy remaining elements if there's no right sublist to merge
-                                                final int finalLeft = left;
-                                                final int finalRight = right;
+                                                final int final_left = left;
+                                                final int final_right = right;
                                                 pool.execute(() -> {
-                                                        System.arraycopy(input_arr, finalLeft, output_arr, finalLeft, finalRight - finalLeft);
+                                                        System.arraycopy(input_arr, final_left, output_arr, final_left, final_right - final_left);
                                                 });
                                         }
                                 }
@@ -149,52 +149,19 @@ public class ExecutorServiceSort implements Sorter {
         }
 
         /**
-         * Sequentially split hold_arr into 2 sublists, sort both sublists into work_arr, merge both sublists back into hold_arr
-         * @param hold_arr Main input array that holds values
-         * @param work_arr Work array
-         * @param begin index of first element in hold_arr to sort
-         * @param end exclusive index of last element in hold_arr to sort
+         * Sequential sort for small arrays
          */
-        public void seq_split(int[] hold_arr, int[] work_arr, int begin, int end) {
-                // Base case
-                if (end-begin <= 1) {
-                        return;
-                }
-
-                // Split a list with more than two items into sublists
-                int middle = (begin + end)/2;
-
-                // Recursively sort both sublists from hold_arr to work_arr
-                seq_split(work_arr, hold_arr, begin, middle);
-                seq_split(work_arr, hold_arr, middle, end);
-
-                // Merge the resulting sublists back into hold_arr
-                seq_merge(work_arr, begin, middle, end, hold_arr);
-        }
-
-        /**
-         * Sequentially merge two sublists in input_arr to output_arr
-         * @param input_arr Array containing sublists
-         * @param output_arr Array to merge into
-         * @param begin index of first element of first sublist
-         * @param middle index of first element of second sublist
-         * @param end exclusive index of last element in second sublist
-         */
-        public void seq_merge(int[] input_arr, int begin, int middle, int end, int[] output_arr) {
-                // Start indexes at the beginning of sublists
-                int i = begin, j = middle;
- 
-                // Loop through all k elements, placing them in order
-                for (int k = begin; k < end; k++) {
-                        // if still elements in first sublist and less than second sublist, put in array
-                        // otherwise take from second sublist
-                        if (i < middle && (j >= end || input_arr[i] <= input_arr[j])) {
-                                output_arr[k] = input_arr[i];
-                                i++;
-                        } else {
-                                output_arr[k] = input_arr[j];
-                                j++;
+        private static void sequential_sort(int[] arr, int begin, int end) {
+                for (int i = begin + 1; i < end; i++) {
+                        int key = arr[i];
+                        int j = i - 1;
+                        
+                        // Move elements greater than key one position ahead
+                        while (j >= begin && arr[j] > key) {
+                                arr[j + 1] = arr[j];
+                                j--;
                         }
+                        arr[j + 1] = key;
                 }
         }
 }

@@ -2,7 +2,7 @@
  * Sort using Java's ForkJoinPool.
  *  
  * We use top-down merge sort with fork-join parallelism:
- * 1) A work array B[] is allocated. 
+ * 1) A work array is allocated. 
  * 2) The input list is recursively divided until sublists are below some threshold. These sublists are sorted sequentially.
  * 3) Then the larger sublists are split and processed in parallel using fork-join.
  * 4) The sublists are merged together recursively until the entire list is merged.
@@ -79,16 +79,16 @@ public class ForkJoinPoolSort implements Sorter {
                                 }
                                 return;
                         }
-
+                        
                         // Else need to parallel sort. Divide into two sublists.
                         int mid = begin + (end - begin) / 2;
-                        MergeSortTask leftTask = new MergeSortTask(src, dest, begin, mid, !srcToDest);
-                        MergeSortTask rightTask = new MergeSortTask(src, dest, mid, end, !srcToDest);
+                        MergeSortTask left_task = new MergeSortTask(src, dest, begin, mid, !srcToDest);
+                        MergeSortTask right_task = new MergeSortTask(src, dest, mid, end, !srcToDest);
 
                         // Hand off left sublist, continue with right sublist
-                        leftTask.fork();
-                        rightTask.compute(); 
-                        leftTask.join();      // Wait for left sublist to complete
+                        left_task.fork();
+                        right_task.compute(); 
+                        left_task.join();      // Wait for left sublist to complete
 
                         // Combine: merge the sorted halves
                         if (srcToDest) {

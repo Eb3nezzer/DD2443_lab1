@@ -15,7 +15,7 @@ public class ExperimentPDC {
                 writer.println("sorter_name,thread_count,average_time,standard_deviation");
                 
                 // Define test parameters
-                String[] sorters = {"Sequential", "JavaSort", "ExecutorService", "ForkJoinPool", "ParallelStream"};
+                String[] sorters = {"Sequential", "JavaSort", "ExecutorService", "ForkJoinPool", "ParallelStream", "Thread"};
                 int[] threads = {1, 2, 4, 8, 16, 32, 48, 64, 96};
                 
                 // Process each sorter

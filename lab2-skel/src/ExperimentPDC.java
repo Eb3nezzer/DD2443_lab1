@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 public class ExperimentPDC {
 
         public static void main(String [] args) {
+            System.err.println("Available Processors: " + Runtime.getRuntime().availableProcessors());
+
             // Define output filename
             String outputFile = "performance_results.csv";
             
@@ -14,7 +16,7 @@ public class ExperimentPDC {
                 
                 // Define test parameters
                 String[] sorters = {"Sequential", "JavaSort", "ExecutorService", "ForkJoinPool", "ParallelStream"};
-                int[] threads = {2, 4, 8, 16, 32, 48, 64, 96};
+                int[] threads = {1, 2, 4, 8, 16, 32, 48, 64, 96};
                 
                 // Process each sorter
                 for (int i = 0; i < sorters.length; i++) {
@@ -51,9 +53,9 @@ public class ExperimentPDC {
             // Number of values.
             int arrSize = 10_000_000;
             // Number of warm-up rounds.
-            int warmUps = 5;
+            int warmUps = 50;
             // Number of measurement rounds.
-            int measurements = 10;
+            int measurements = 50;
             // Seed for RNG
             int seed = 42;
 

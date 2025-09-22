@@ -15,22 +15,33 @@ public class ExperimentPDC {
                 writer.println("sorter_name,thread_count,average_time,standard_deviation");
                 
                 // Define test parameters
-                String[] sorters = {"Sequential", "JavaSort", "ExecutorService", "ForkJoinPool", "ParallelStream", "Thread"};
+                // String[] sorters = {"Sequential", "JavaSort", "ExecutorService", "ForkJoinPool", "ParallelStream", "Thread"};
+                String[] sorters = {"Thread"};
+
                 int[] threads = {1, 2, 4, 8, 16, 32, 48, 64, 96};
                 
                 // Process each sorter
                 for (int i = 0; i < sorters.length; i++) {
-                    if (i == 0 || i == 1) {
-                        // Sequential and JavaSort: only test with one thread
-                        double[] results = measurement(1, sorters[i]);
-                        writer.printf("%s,%d,%.6f,%.6f%n", 
-                                    sorters[i], 1, results[0], results[1]);
-                        writer.flush();
-                        System.out.printf("Completed: %s with 1 thread - Avg: %.6f, StdDev: %.6f%n", 
-                                        sorters[i], results[0], results[1]);
-                    } else {
-                        // Other sorters: test with full thread range
-                        for (int j = 0; j < threads.length; j++) {
+                //     if (i == 0 || i == 1) {
+                //         // Sequential and JavaSort: only test with one thread
+                //         double[] results = measurement(1, sorters[i]);
+                //         writer.printf("%s,%d,%.6f,%.6f%n", 
+                //                     sorters[i], 1, results[0], results[1]);
+                //         writer.flush();
+                //         System.out.printf("Completed: %s with 1 thread - Avg: %.6f, StdDev: %.6f%n", 
+                //                         sorters[i], results[0], results[1]);
+                //     } else {
+                //         // Other sorters: test with full thread range
+                //         for (int j = 0; j < threads.length; j++) {
+                //             double[] results = measurement(threads[j], sorters[i]);
+                //             writer.printf("%s,%d,%.6f,%.6f%n", 
+                //                         sorters[i], threads[j], results[0], results[1]);
+                //                 writer.flush();
+                //             System.out.printf("Completed: %s with %d threads - Avg: %.6f, StdDev: %.6f%n", 
+                //                             sorters[i], threads[j], results[0], results[1]);
+                //         }
+                //     }
+                    for (int j = 0; j < threads.length; j++) {
                             double[] results = measurement(threads[j], sorters[i]);
                             writer.printf("%s,%d,%.6f,%.6f%n", 
                                         sorters[i], threads[j], results[0], results[1]);
@@ -38,7 +49,6 @@ public class ExperimentPDC {
                             System.out.printf("Completed: %s with %d threads - Avg: %.6f, StdDev: %.6f%n", 
                                             sorters[i], threads[j], results[0], results[1]);
                         }
-                    }
                 }
                 
                 System.out.printf("Results written to %s%n", outputFile);

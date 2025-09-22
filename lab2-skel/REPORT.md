@@ -11,13 +11,16 @@ We chose to implement MergeSort. For the sequential version this is implemented 
 
 ## Task 2: Amdahl's Law
 
-Our Amdahl's law ...
+Amdahl's law assumes that the parallelisable part of a workload can be indefinitely split between threads, but merge sort inherently has a "sequential" nature to its algorithm: the last merge involves one thread merging each half of the list. There is no way around this final step, and as the number of threads increase this final step becomes a bigger proportion of the workload. In addition, as the number of threads increase there is increased communication overhead between the threads. We thus can say that there isn't a linear performance gain when adding more threads as in general Amdahl's law - the performance gain from each additional thread decreases marginally as $N$ increases. We thus add a logarithmic factor to penalise additional threads:
+$$
+    \text{Speedup}_n = \frac{1}{(1-p) + p \cdot \frac{\log (N)}{N}}
+$$
 
-Here is a plot of our version of Amdahl's law ...
+A plot of our version of Amdahl's law can be seen in Figure 1.
 
 ![amdahl's law plot](data/amdahl.png)
 
-We see that ...
+We see that for $p<0.8$ there isn't a huge speedup gained from adding additional threads. This seems overly pessimistic but it reflects the difficult nature of merge sort.
 
 ## Task 3: ExecutorServiceSort
 
@@ -45,8 +48,19 @@ To implement merge sort using parallel streams, we loop through several differen
 
 ## Task 6: Performance measurements with PDC
 
-We decided to sort 10,000,000 integers ...
+To measure our implementations we used the folowing parameters:
 
-![pdc plot](data/pdc.png)
+- Array size: 10,000,000
+- Warm up rounds: 50
+- Measurement rounds: 50
+- Seed for RNG: 42
 
-We see that ...
+We tested each of the sorters with the desired thread ranges, resulting in the following plot:
+
+![pdc plot](data/thread_performance.png)
+
+As expected, the single thread sequential sort takes longer than the native Java sort implementation. Most of the parallel sorts take less time than the single thread sorts. ExecutorService had a unintuitive pattern: as thread count increased initially, execution time dropped as expected. However for larger thread counts the execution time went up. We're not sure if this is to do with the specific implementation or something about the ExectorService framework that results in large allocation overhead for larger core counts. ForkJoinPool ran the fastest for larger thread counts. This matches the intuition that this mechanism perfectly matches the divide-and-conquer nature of merge sort and thus the compiler can probably optimise most successfully under this paradigm using the framework.
+
+
+ForkJoinPool was the easiest to implement as the framework handles all of the allocation and joining logic for you, and also was easy to reason about. It matched this use case perfectly, so is our preferred method for such tasks. The ParallelStream method also resulted in surprisingly good performance and was interesting to reason about, so it seems to be a good option for more general tasks.
+Using Thread class directly was the hardest to implement - we had to handle all the allocation and joining logic manually. It did perform about as well as the ForkJoinPool and ParallelStream frameworks.

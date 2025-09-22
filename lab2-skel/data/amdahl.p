@@ -8,7 +8,7 @@ set terminal png size 800,500
 set output 'amdahl.png'
 
 # Graphics title
-set title "My Amdahl's law for X sort"
+set title "My Amdahl's law for merge sort"
 
 # Set x and y label
 set xlabel 'threads'

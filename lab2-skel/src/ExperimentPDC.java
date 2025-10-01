@@ -16,7 +16,7 @@ public class ExperimentPDC {
                 
                 // Define test parameters
                 // String[] sorters = {"Sequential", "JavaSort", "ExecutorService", "ForkJoinPool", "ParallelStream", "Thread"};
-                String[] sorters = {"Thread"};
+                String[] sorters = {"ExecutorService", "Thread"};
 
                 int[] threads = {1, 2, 4, 8, 16, 32, 48, 64, 96};
                 
@@ -88,9 +88,9 @@ public class ExperimentPDC {
                 case "Sequential":
                         return new SequentialSort();
                 case "Thread":
-                        return new ThreadSort(threads);
+                        return new ThreadSort(threads,1250);
                 case "ExecutorService":
-                        return new ExecutorServiceSort(threads);
+                        return new ExecutorServiceSort(threads, 1250);
                 case "ForkJoinPool":
                         return new ForkJoinPoolSort(threads);
                 case "ParallelStream":

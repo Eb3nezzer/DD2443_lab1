@@ -64,3 +64,6 @@ As expected, the single thread sequential sort takes longer than the native Java
 
 ForkJoinPool was the easiest to implement as the framework handles all of the allocation and joining logic for you, and also was easy to reason about. It matched this use case perfectly, so is our preferred method for such tasks. The ParallelStream method also resulted in surprisingly good performance and was interesting to reason about, so it seems to be a good option for more general tasks.
 Using Thread class directly was the hardest to implement - we had to handle all the allocation and joining logic manually. It did perform about as well as the ForkJoinPool and ParallelStream frameworks.
+
+**UPDATED**:
+We now see the expected pattern across all implementations. As the number of threads increase, the sorters execution time rapidly decreases initially and then flattens out once a certain number of thresholds is reached. At this point adding threads does not affect performance (and for some sorters seems to make it slightly slower). The parallel sorts also take longer than the purely sequential sorts for low thread counts (e.g. 2) due to the overhead of handling the additional threads.

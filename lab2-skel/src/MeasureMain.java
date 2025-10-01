@@ -13,9 +13,11 @@ public class MeasureMain {
                 int measurements = Integer.parseInt(args[4]);
                 // Seed for RNG
                 int seed = Integer.parseInt(args[5]);
+                // Sequential threshold used.
+                int threshold = Integer.parseInt(args[6]);
 
                 // Sorting algorithm.
-                Sorter sorter = getSorter(name, threads);
+                Sorter sorter = getSorter(name, threads, threshold);
 
                 if (sorter == null) {
                         System.err.printf("ERROR: Unknown sorter %s.\n", args[0]);
@@ -29,6 +31,7 @@ public class MeasureMain {
                 System.err.printf("Warm-up rounds:     %d\n", warmUps);
                 System.err.printf("Measurement rounds: %d\n", measurements);
                 System.err.printf("RNG seed:           %d\n", seed);
+                System.err.printf("Sequential threshold: %d\n", threshold);
 
                 // Warm-up but also check correctness.
                 System.err.println("Validating sorter");
@@ -49,14 +52,14 @@ public class MeasureMain {
                 System.err.println("Measurements done");
         }
 
-        private static Sorter getSorter(String name, int threads) {
+        private static Sorter getSorter(String name, int threads, int threshold) {
                 switch (name) {
                 case "Sequential":
                         return new SequentialSort();
                 case "Thread":
-                        return new ThreadSort(threads);
+                        return new ThreadSort(threads, threshold);
                 case "ExecutorService":
-                        return new ExecutorServiceSort(threads);
+                        return new ExecutorServiceSort(threads, threshold);
                 case "ForkJoinPool":
                         return new ForkJoinPoolSort(threads);
                 case "ParallelStream":

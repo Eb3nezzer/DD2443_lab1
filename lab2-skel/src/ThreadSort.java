@@ -2,19 +2,20 @@
  * Sort using Java's Thread, Runnable, start(), and join().
  * 
  * We use bottom-up merge sort. On input arr[] with n elements:
- * 1) A work array is allocated. The arr[] list is split into chunks of 16 elements.
- * 2) Each thread sequentially sorts a 16 element list into work[]. All 16-chunks are sorted.
- * 3) We then have n/16 sorted sublists. The first two sublists are merged, the second two are merged, and so on.
- * 4) We then have n/8 sorted sublists. The first two sublists are merged, the second two are merged, and so on.
+ * 1) A work array is allocated. The arr[] list is split into chunks of sequential_threshold elements.
+ * 2) Each thread sequentially sorts a sequential_threshold element list in place. All chunks are sorted.
+ * 3) We then have n/sequential_threshold sorted sublists. The first two sublists are merged, the second two are merged, and so on.
+ * 4) We then have n/(2*sequential_threshold) sorted sublists. The first two sublists are merged, the second two are merged, and so on.
  * 5) This continues at each level until only two sublists are remaining, which are finally merged.
  */
 
 public class ThreadSort implements Sorter {
     public final int threads;
-    public final int sequential_threshold = 16;
+    public final int sequential_threshold;
 
-    public ThreadSort(int threads) {
+    public ThreadSort(int threads, int sequential_threshold) {
         this.threads = threads;
+        this.sequential_threshold = sequential_threshold;
     }
 
     public int getThreads() {
@@ -31,7 +32,7 @@ public class ThreadSort implements Sorter {
         int[] work = new int[arr.length];
 
         try {
-            // Initial round of sequential sorts into work[]
+            // Initial round of sequential sorts (in-place in arr)
             int sequential_len = sequential_threshold;
             int num_sublists = (arr.length + sequential_len - 1) / sequential_len;
             
@@ -50,7 +51,9 @@ public class ThreadSort implements Sorter {
                     for (int i = start_chunk; i < end_chunk; i++) {
                         int begin = i * sequential_len;
                         int end = Math.min(begin + sequential_len, arr.length);
-                        seq_split(arr, work, begin, end);
+                        
+                        // Sort this chunk in place using sequential merge sort
+                        sequentialMergeSort(arr, work, begin, end);
                     }
                 });
                 // Start this thread
@@ -70,7 +73,7 @@ public class ThreadSort implements Sorter {
 
             // Now perform bottom-up merging
             int current_size = sequential_len;
-            boolean use_work_as_input = false; // Toggle between arr and work as input/output
+            boolean use_work_as_input = false; // arr has sorted chunks, work is scratch space
             
             while (current_size < arr.length) {
                 int[] input_arr = use_work_as_input ? work : arr;
@@ -127,7 +130,7 @@ public class ThreadSort implements Sorter {
                 use_work_as_input = !use_work_as_input;
             }
             
-            // If the final result is in work transfer to arr
+            // If the final result is in work, transfer to arr
             if (use_work_as_input) {
                 System.arraycopy(work, 0, arr, 0, arr.length);
             }
@@ -136,6 +139,46 @@ public class ThreadSort implements Sorter {
             // Handle any unexpected exceptions
             Thread.currentThread().interrupt();
         }
+    }
+    
+    /**
+     * Sequential merge sort - sorts arr[begin..end) using merge sort
+     * Uses work as temporary space
+     */
+    private void sequentialMergeSort(int[] arr, int[] work, int begin, int end) {
+        // Base case
+        if (end - begin <= 1) {
+            return;
+        }
+        
+        int middle = (begin + end) / 2;
+        
+        // Recursively sort both halves
+        sequentialMergeSort(arr, work, begin, middle);
+        sequentialMergeSort(arr, work, middle, end);
+        
+        // Merge the two sorted halves
+        int i = begin, j = middle, k = begin;
+        
+        // Merge into work array
+        while (i < middle && j < end) {
+            if (arr[i] <= arr[j]) {
+                work[k++] = arr[i++];
+            } else {
+                work[k++] = arr[j++];
+            }
+        }
+        
+        // Copy remaining elements
+        while (i < middle) {
+            work[k++] = arr[i++];
+        }
+        while (j < end) {
+            work[k++] = arr[j++];
+        }
+        
+        // Copy back to arr
+        System.arraycopy(work, begin, arr, begin, end - begin);
     }
     
     /**
@@ -170,53 +213,5 @@ public class ThreadSort implements Sorter {
         }
     }
 
-    /**
-     * Sequentially split hold_arr into 2 sublists, sort both sublists into work_arr, merge both sublists back into hold_arr
-     * @param hold_arr Main input array that holds values
-     * @param work_arr Work array
-     * @param begin index of first element in hold_arr to sort
-     * @param end exclusive index of last element in hold_arr to sort
-     */
-    public void seq_split(int[] hold_arr, int[] work_arr, int begin, int end) {
-        // Base case
-        if (end-begin <= 1) {
-            return;
-        }
 
-        // Split a list with more than two items into sublists
-        int middle = (begin + end)/2;
-
-        // Recursively sort both sublists from hold_arr to work_arr
-        seq_split(work_arr, hold_arr, begin, middle);
-        seq_split(work_arr, hold_arr, middle, end);
-
-        // Merge the resulting sublists back into hold_arr
-        seq_merge(work_arr, begin, middle, end, hold_arr);
-    }
-
-    /**
-     * Sequentially merge two sublists in input_arr to output_arr
-     * @param input_arr Array containing sublists
-     * @param output_arr Array to merge into
-     * @param begin index of first element of first sublist
-     * @param middle index of first element of second sublist
-     * @param end exclusive index of last element in second sublist
-     */
-    public void seq_merge(int[] input_arr, int begin, int middle, int end, int[] output_arr) {
-        // Start indexes at the beginning of sublists
-        int i = begin, j = middle;
-
-        // Loop through all k elements, placing them in order
-        for (int k = begin; k < end; k++) {
-            // if still elements in first sublist and less than second sublist, put in array
-            // otherwise take from second sublist
-            if (i < middle && (j >= end || input_arr[i] <= input_arr[j])) {
-                output_arr[k] = input_arr[i];
-                i++;
-            } else {
-                output_arr[k] = input_arr[j];
-                j++;
-            }
-        }
-    }
 }

@@ -1,0 +1,10 @@
+2025.09.23 08:39:37 INFO  Started: Metals version 1.5.2 in folders '/home/maxharrison/uni/DD2443/DD2443_lab1' for client Neovim 0.10.2.[0m
+2025.09.23 08:39:44 WARN  no build tool detected in workspace '/home/maxharrison/uni/DD2443/DD2443_lab1'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. [0m
+2025.09.23 08:39:44 WARN  Build server is not auto-connectable.[0m
+2025.09.23 08:39:44 WARN  no build target for: /home/maxharrison/uni/DD2443/DD2443_lab1/lab2-skel/src/ExecutorServiceSort.java[0m
+2025.09.23 08:39:47 INFO  no build target found for /home/maxharrison/uni/DD2443/DD2443_lab1/lab2-skel/src/ExecutorServiceSort.java. Using presentation compiler with project's scala-library version: 3.3.5[0m
+2025.09.23 08:39:47 INFO  no build target found for /home/maxharrison/uni/DD2443/DD2443_lab1/lab2-skel/src/ExecutorServiceSort.java. Using presentation compiler with project's scala-library version: 3.3.5[0m
+Sept 23, 2025 8:39:51 AM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report /home/maxharrison/uni/DD2443/DD2443_lab1/.metals/.reports/metals-full/2025-09-23/r_compiler-error_08-39-51-524.md
+2025.09.23 08:40:02 INFO  Shutting down server[0m
+2025.09.23 08:40:02 INFO  shutting down Metals[0m

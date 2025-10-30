@@ -1,7 +1,7 @@
 import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Random;
+// import java.util.Set;
+// import java.util.HashSet;
+// import java.util.Random;
 
 public class Main {
 
@@ -55,6 +55,7 @@ public class Main {
                         int discrepancy = Log.validate(set.getLog());
                         System.err.println("Warmup time: " + time);
                         System.err.println("Warmup discrepancy: " + discrepancy);
+                        set.reset();
                 }
 
                 for (int i = 0; i < measurements; ++i) {
@@ -62,6 +63,7 @@ public class Main {
                         int discrepancy = Log.validate(set.getLog());
                         System.err.println("Measurement time: " + time);
                         System.err.println("Measurement discrepancy: " + discrepancy);
+                        set.reset();
                 }
         }
 
@@ -79,9 +81,9 @@ public class Main {
         public static LockFreeSet<Integer> getSet(String name, int threads) {
                 switch (name) {
                 case "Default": 
-                        return new LockFreeSkipList();
+                        return new LockFreeSkipList<Integer>();
                 case "Locked":
-                        // TODO: Add your own set
+                        return new GlobalLockSkipList<Integer>();
                 case "LocalLog":
                         // TODO: Add your own set
                 case "GlobalLog":

@@ -1,12 +1,39 @@
+import java.util.HashSet;
+import java.util.Arrays;
+
 public class Log {
         private Log() {
                 // Do not implement
         }
 
         public static int validate(Log.Entry[] log) {
-                // Implement this.
-                // Should return the number of discrepancies in the log.
-                return -1;
+                // Sort the log entries by linearisation timestamp
+                Arrays.sort(log, (a,b) -> Long.compare(a.timestamp, b.timestamp));
+                
+                HashSet<Integer> replaySet = new HashSet<>();
+                int num_disc = 0;
+
+                for (Entry entry: log) {
+                        boolean succ;
+                        switch (entry.method) {
+                                case ADD:
+                                        succ = replaySet.add(entry.arg);
+                                        break;
+                                case REMOVE:
+                                        succ = replaySet.remove(entry.arg);
+                                        break;
+                                case CONTAINS:
+                                        succ = replaySet.contains(entry.arg);
+                                        break;
+                                default:
+                                        succ = false;
+                        }
+                        if (succ != entry.ret) {
+                                num_disc ++;
+                        }
+                }
+
+                return num_disc;
         }
 
         // Log entry for linearization point.

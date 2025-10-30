@@ -1,4 +1,17 @@
-import java.util.concurrent.atomic.AtomicMarkableReference;
+file://<WORKSPACE>/lab3-skel/src/LockFreeSkipList.java
+### java.util.NoSuchElementException: next on empty iterator
+
+occurred in the presentation compiler.
+
+presentation compiler configuration:
+
+
+action parameters:
+offset: 0
+uri: file://<WORKSPACE>/lab3-skel/src/LockFreeSkipList.java
+text:
+```scala
+@@import java.util.concurrent.atomic.AtomicMarkableReference;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LockFreeSkipList<T extends Comparable<T>> implements LockFreeSet<T> {
@@ -65,7 +78,7 @@ public class LockFreeSkipList<T extends Comparable<T>> implements LockFreeSet<T>
                         if (found) {
                                 return false;
                         } else {
-                                Node<T> newNode = new Node<T>(x, topLevel);
+                                Node<T> newNode = new Node(x, topLevel);
                                 for (int level = bottomLevel; level <= topLevel; level++) {
                                         Node<T> succ = succs[level];
                                         newNode.next[level].set(succ, false);
@@ -140,7 +153,7 @@ public class LockFreeSkipList<T extends Comparable<T>> implements LockFreeSet<T>
                                         curr = succ;
                                         succ = curr.next[level].get(marked);
                                 }
-                                if (curr.value != null && x.compareTo(curr.value) > 0) {
+                                if (curr.value != null && x.compareTo(curr.value) < 0) {
                                         pred = curr;
                                         curr = succ;
                                 } else {
@@ -171,7 +184,7 @@ retry:
                                                 curr = succ;
                                                 succ = curr.next[level].get(marked);
                                         }
-                                        if (curr.value != null && x.compareTo(curr.value) > 0) {
+                                        if (curr.value != null && x.compareTo(curr.value) < 0) {
                                                 pred = curr;
                                                 curr = succ;
                                         } else {
@@ -199,3 +212,25 @@ retry:
         }
 }
 
+
+```
+
+
+
+#### Error stacktrace:
+
+```
+scala.collection.Iterator$$anon$19.next(Iterator.scala:973)
+	scala.collection.Iterator$$anon$19.next(Iterator.scala:971)
+	scala.collection.mutable.MutationTracker$CheckedIterator.next(MutationTracker.scala:76)
+	scala.collection.IterableOps.head(Iterable.scala:222)
+	scala.collection.IterableOps.head$(Iterable.scala:222)
+	scala.collection.AbstractIterable.head(Iterable.scala:935)
+	dotty.tools.dotc.interactive.InteractiveDriver.run(InteractiveDriver.scala:164)
+	dotty.tools.pc.CachingDriver.run(CachingDriver.scala:45)
+	dotty.tools.pc.PcInlayHintsProvider.<init>(PcInlayHintsProvider.scala:45)
+	dotty.tools.pc.ScalaPresentationCompiler.inlayHints$$anonfun$1(ScalaPresentationCompiler.scala:122)
+```
+#### Short summary: 
+
+java.util.NoSuchElementException: next on empty iterator

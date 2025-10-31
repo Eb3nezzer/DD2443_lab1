@@ -1,8 +1,6 @@
 import java.util.concurrent.atomic.AtomicMarkableReference;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -316,8 +314,7 @@ retry:
 
     public Log.Entry[] getLog() {
         // Convert queue to array and sort by timestamp
-        List<Log.Entry> entries = new ArrayList<>(globalLog);
-        Log.Entry[] sortedLog = entries.toArray(new Log.Entry[0]);
+        Log.Entry[] sortedLog = globalLog.toArray(new Log.Entry[0]);
         Arrays.sort(sortedLog, Comparator.comparingLong(e -> e.timestamp));
         
         return sortedLog;

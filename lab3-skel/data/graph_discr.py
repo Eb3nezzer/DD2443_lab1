@@ -25,7 +25,7 @@ def main():
         
         plt.plot(
             group['threads'],
-            group['discrepancies'],
+            group['average_discrepancies'],
             label=label,
             marker='o',
             linestyle='-',
@@ -34,8 +34,8 @@ def main():
         )
     
     plt.xlabel('Number of Threads', fontsize=12)
-    plt.ylabel('Discrepancies', fontsize=12)
-    plt.title('Discrepancies vs Number of Threads\nGrouped by Distribution and Mix', fontsize=14)
+    plt.ylabel('Average Discrepancies', fontsize=12)
+    plt.title('Average Discrepancies vs Number of Threads\nGrouped by Distribution and Mix', fontsize=14)
     plt.legend(title='Distribution & Mix', bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.grid(True, alpha=0.3)
     

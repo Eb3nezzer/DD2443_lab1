@@ -127,7 +127,7 @@ public class LockFreeSkipList<T extends Comparable<T>> implements LockFreeSet<T>
 
         public boolean contains(int threadId, T x) {
                 int bottomLevel = 0;
-                int key = x.hashCode();
+                // int key =  x.hashCode();
                 boolean[] marked = {false};
                 Node<T> pred = head;
                 Node<T> curr = null;
@@ -195,7 +195,6 @@ retry:
                 for (int i = 0; i < head.next.length; i++) {
                         head.next[i] = new AtomicMarkableReference<LockFreeSkipList.Node<T>>(tail, false);
                 }
-                // TODO: Clear the log if you have one.
         }
 }
 

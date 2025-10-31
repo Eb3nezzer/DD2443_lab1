@@ -86,7 +86,7 @@ public class Experiment {
             System.exit(1);
         }
 
-        String[] valid_types = {"Default", "Locked", "LocalLog", "GlobalLog"};
+        String[] valid_types = {"Default", "Locked", "LocalLog", "GlobalLog", "CustomLog"};
         if (!Arrays.asList(valid_types).contains(setType)) {
             System.err.println("ERROR: must have valid set type");
             System.exit(1);
@@ -215,6 +215,8 @@ public class Experiment {
                 return new LocalLogSkipList<Integer>();
             case "GlobalLog":
                 return new GlobalLogSkipList<Integer>();
+            case "CustomLog":
+                return new CustomLogSkipList<Integer>();
             default: 
                 return null;
         }

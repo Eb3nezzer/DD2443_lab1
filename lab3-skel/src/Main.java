@@ -85,9 +85,11 @@ public class Main {
                 case "Locked":
                         return new GlobalLockSkipList<Integer>();
                 case "LocalLog":
-                        // TODO: Add your own set
+                        return new LocalLogSkipList<Integer>();
                 case "GlobalLog":
-                        // TODO: Add your own set
+                        return new GlobalLogSkipList<Integer>();
+                case "CustomLog":
+                        return new CustomLogSkipList<Integer>();
                 default: 
                         return null;
                 }
